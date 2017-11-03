@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Quicksand');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f8ffe8+0,d6a2a2+100 */
+  background: #f8ffe8; /* Old browsers */
+  background: -moz-linear-gradient(top,  #f8ffe8 0%, #d6a2a2 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #f8ffe8 0%,#d6a2a2 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #f8ffe8 0%,#d6a2a2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8ffe8', endColorstr='#d6a2a2',GradientType=0 ); /* IE6-9 */
+  height: 100vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.logo h1 {
+  font-family: 'Lobster', sans-serif;
+  color: black;
+}
+
+.add-form {
+  margin-top: 20px;
+}
+
+.form-zone {
+  text-align: center;
+  line-height: 10px;
+}
+
+.title-tools {
+  background-color: rgba(128,128,128,0.7);
+}
+
+.title a{
+  font-size: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  color: black;
+  text-shadow: 0.5px 0.5px 5px grey;
+}
+
+.tools {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.tools p {
+  margin: 0 10px;
+}
+
+.dates-description {
+  background-color: rgba(220,220,220,0.7);
+}
+
+.dates {
+  font-size: small;
+}
+
+.list-section {
+  margin: 20px;
+  overflow: scroll;
+}
