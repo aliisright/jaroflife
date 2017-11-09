@@ -1,12 +1,15 @@
 <?php
+session_start();
 
 require '../connection-db/connexion-bdd.php';
 
-$tasksDel = $tdl->prepare('UPDATE taskList SET done_date = ? WHERE id = ?');
+$sql = 'UPDATE taskList SET done_date = ? WHERE id = ?';
 
 if(isset($_GET['idTask'])) {
 
-  $tasksDel->execute(array(NULL, $_GET['idTask']));
+  $pdo_statement = $tdl->prepare($sql);
+
+  $pdo_statement->execute(array(NULL, $_GET['idTask']));
 
 }
 

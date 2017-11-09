@@ -1,40 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>The ToDoList Project</title>
-  <meta charset="utf-8">
-<!-- Responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<!-- My stylesheet -->
-  <link rel="stylesheet" type="text/css" href="../view/style/home.css">
-</head>
-<body>
+<!--FORM MODIF DE PROJET-->
 
-  <?php include '../view/header.php'; ?> <!--HEADER-->
-
-  <!--FORM MODIF DE PROJET-->
-
-      <?php
-    $sql = 'SELECT * FROM projectsList ';
-    $parameters = [];
-
-    if(isset($_GET['idProject'])) {
-      $sql .= 'WHERE id = ? ';
-      $parameters[] = $_GET['idProject'];
-    }
+  <?php
+    $sql = 'SELECT * FROM projectsList WHERE id = ? AND id_user = ?';
 
     $project = $tdl->prepare($sql);
-    $project->execute($parameters);
+    $project->execute(array($_GET['idProject'], $_SESSION['id']));
 
     while($donnees = $project->fetch()) {
       echo '<h3 align="center">Edit: ' . $donnees['name'] . '</h3><hr>';
-?>
+  ?>
     <section class="add-form container-fluid row">
       <div class="col-md-4"></div>
 
-      <form class="form-zone col-md-4" action="../model/edit-project.php?idProject=<?php echo $_GET['idProject']; ?>" method="POST">
+      <form class="form-zone col-md-4" action="" method="POST">
 
           <div class="form-group">
             <label for="name">Edit name</label>
@@ -48,15 +26,19 @@
 
           <div class="form-group">
             <button class="btn btn-dark" type="submit" name="create" onclick="return confirm('Are you sure that you want to modify this project ?')">Save changes</button>
-            <a href="../index/index.php" role="button" class="btn btn-outline-secondary">Back to projects</a>
+            <a href="../index/interface-projects.php" role="button" class="btn btn-outline-secondary">Back to projects</a>
           </div>
 
 
       </form>
 
-      <div class="col-md-4"></div>
+      <div class="col-md-4"></div>`
+
+      <!--Déconnexion-->
     </section>
-  </div>
+
+    <p align="center"><a href="../model/signout.php">Sign out</a></p><br>
+
 
 <?php } ?>
 
@@ -66,5 +48,3 @@
   <script src=“https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js”></script>
 </body>
 </html>
-
-

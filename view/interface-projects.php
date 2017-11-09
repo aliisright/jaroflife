@@ -1,24 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>The ToDoList Project</title>
-  <meta charset="utf-8">
-<!-- Responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<!-- My stylesheet -->
-  <link rel="stylesheet" type="text/css" href="../view/style/home.css">
-</head>
-<body>
+<!--Hello Member! message & Déconnexion-->
+  <h3 align="center">Hello <?php echo $userinfo['pseudo'] ?> !</h3>
+  <p align="center"><a href="../model/signout.php">Sign out</a></p><br>
 
-  <?php include '../view/header.php'; ?> <!--HEADER-->
 
   <!--FORM AJOUT DE PROJET-->
     <section class="add-form container-fluid row">
       <div class="col-md-4"></div>
 
-      <form class="form-zone col-md-4" action="../model/add-project.php" method="POST">
+      <form class="form-zone col-md-4" action="" method="POST">
 
           <div class="form-group">
             <label for="name">Project name</label>
@@ -38,16 +27,17 @@
 
       <div class="col-md-4"></div>
     </section>
-  </div>
 
 <!--LISTE DE PROJETS-->
   <section class="browse container">
 
     <?php //RECUPERATION DE DONNEES ET LES AFFICHER AVEC WHILE
-      $projects = $tdl->query('SELECT * FROM projectslist ORDER BY date_creation DESC');
-
+      $projects = $tdl->prepare('SELECT * FROM projectslist WHERE id_user = ? ORDER BY date_creation DESC');
+      $projects->execute(array($userinfo['id']));
 
       while($donnees = $projects->fetch()) {
+
+
     ?>
         <div class="list-section">
           <!--TITRE DU PROJET ET LES OUTILS DE MODIF-->
@@ -56,9 +46,9 @@
               <a href="interface-tasks.php?idProject= <?php echo $donnees['id'] ?>"><?php echo $donnees['name']; ?></a>
             </div>
             <div class="tools col-md-6"> <!--les outils / modifier et supprimer-->
-              <p><a href ="interface-edit-project.php?idProject= <?php echo $donnees['id']; ?>"><img src="../view/img/edit.png" width="20px"></a></p>
+              <p><a href ="interface-edit-project.php?idProject=<?php echo $donnees['id']; ?>"><img src="../view/img/edit.png" alt="edit" width="20px"></a></p>
 
-              <p><a href ="../model/delete-project.php?idProject= <?php echo $donnees['id'] ?>" onclick="return confirm('Are you sure that you want to delete this project ?')"><img src="../view/img/delete.png" width="20px"></a></p>
+              <p><a href ="../model/delete-project.php?idProject=<?php echo $donnees['id'] ?>" onclick="return confirm('Are you sure that you want to delete this project ?')"><img src="../view/img/delete.png" alt="delete" width="20px"></a></p>
 
             </div>
           </div>

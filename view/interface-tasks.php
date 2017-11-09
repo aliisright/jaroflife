@@ -1,43 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>My list</title>
-  <meta charset="utf-8">
-<!-- Responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<!-- My stylesheet -->
-  <link rel="stylesheet" type="text/css" href="../view/style/tasks.css">
-</head>
-<body>
-
-  <?php include '../view/header.php'; ?> <!--HEADER-->
-
 <!--AJOUT TACHE-->
   <section class="form-task container-fluid row">
     <div class="col"></div>
     <div class="col">
       <?php
 
-        if(isset($_GET['idProject'])) {
-          $nameProjet = $tdl->prepare('SELECT * FROM projectsList WHERE id = ?');
-          $nameProjet->execute(array($_GET['idProject']));
+        $getIdProject = $_GET['idProject'];
+        $sessionId = $_SESSION['id'];
 
-          while($title = $nameProjet->fetch() ) {
+        $sql = 'SELECT * FROM projectsList WHERE id = ? AND id_user = ?';
+
+        if(isset($getIdProject, $sessionId)) {
+
+          $pdo_statement = $tdl->prepare($sql);
+          $pdo_statement->execute(array($getIdProject, $sessionId));
+
+        }
+
+          while($donnees = $pdo_statement->fetch() ) {
       ?>
             <!--Nom de projet-->
-            <h3 align="center"><?php echo $title['name'] . ' | N°: ' . $title['id'] ?></h3>
-            <a href="../index/index.php" role="button" class="btn btn-outline-secondary">Back to projects</a>
+            <h3 align="center"><?php echo $donnees['name'] . ' | N°: ' . $donnees['id'] ?></h3>
+            <a href="../index/interface-projects.php" role="button" class="btn btn-outline-secondary">Back to projects</a>
             <hr>
 
       <?php
           }
-        }
 
       ?>
-        <!--Formaulaire ajout-->
-        <form action="../model/add-task.php" method="POST">
+
+        <form action="" method="POST"> <!--Formaulaire ajout-->
 
           <div class="group-control">
             <label for="name">Task name </label>
@@ -68,6 +59,7 @@
         </form>
         <hr>
     </div>
+
     <div class="col"></div>
 
   </section>
@@ -78,112 +70,108 @@
   <section class="lists container">
     <div>
 
-      <h3 align="center">Your to do list</h3>
+       <h3 align="center">Your to do list</h3>
 
+       <?php
+          $sql = 'SELECT * FROM tasklist WHERE id_project = ? AND id_user = ? AND done_date IS NULL ORDER BY priority ASC';
 
-      <?php
-    $sql = 'SELECT * FROM tasklist ';
-    $parameters = [];
+          if(isset($getIdProject, $sessionId)) {
 
-    if(isset($_GET['idProject'])) {
-      $sql .= 'WHERE id_project = ? ';
-      $parameters[] = $_GET['idProject'];
-    }
+            $pdo_statement = $tdl->prepare($sql);
+            $pdo_statement->execute(array($getIdProject, $sessionId));
 
-    $sql .= 'AND done_date IS NULL ORDER BY priority ASC';
+          }
+       ?>
 
-    $tasks = $tdl->prepare($sql);
-    $tasks->execute($parameters);
+       <table class="table table-dark">
+          <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Creation date</th>
+            <th>Last modification</th>
+            <th>Priority</th>
+          </tr>
 
-  ?>
-
-             <table class="table table-dark">
-                <tr>
-                  <th>Task</th>
-                  <th>Description</th>
-                  <th>Creation date</th>
-                  <th>Last modification</th>
-                  <th>Priority</th>
-                </tr>
-            <?php
-            while($donnees = $tasks->fetch()) {
-              ?>
-
-                <tr>
-                  <td> <?php echo $donnees['name'] ?></td>
-                  <td> <?php echo $donnees['description'] ?></td>
-                  <td> <?php echo $donnees['date_creation'] ?></td>
-                  <td> <?php echo $donnees['date_last_modification'] ?></td>
-                  <td> <?php echo $donnees['priority'] ?></td>
-
-                  <td> <a href ="interface-edit-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>"><img src="../view/img/edit.png" width="20px"></a> </td>
-
-                  <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')"><img src="../view/img/delete.png" width="20px"></a> </td>
-
-                  <td> <a href ="../model/done-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you have accomplished this task ?')"><img src="../view/img/done.png" width="20px"></a> </td>
-
-                </tr>
-
-            <?php
-            }
-
-            $tasks->closeCursor();
-          ?>
-            </table>
-    </div>
-
-
-
-  <div class="row">
-    <div class="col-3"></div>
-    <div class="done col-6">
-      <h4>History of tasks done</h4>
-
-        <?php
-        $sql = 'SELECT * FROM tasklist ';
-        $parameters = [];
-        if(isset($_GET['idProject'])) {
-        $sql .= 'WHERE id_project = ? ';
-        $parameters[] = $_GET['idProject'];
-      }
-
-      $sql .= 'AND done_date IS NOT NULL ORDER BY done_date DESC';
-
-      $tasks = $tdl->prepare($sql);
-      $tasks->execute($parameters);
-
-      ?>
-
-           <table class="table">
-              <tr>
-                <th>Task</th>
-                <th>done on</th>
-              </tr>
           <?php
-          while($donnees = $tasks->fetch()) {
-            ?>
+          while($donnees = $pdo_statement->fetch()) {
+          ?>
 
-              <tr>
-                <td> <?php echo $donnees['name'] ?></td>
-                <td> <?php echo $donnees['done_date'] ?></td>
+          <tr>
+            <td> <?php echo $donnees['name'] ?></td>
+            <td> <?php echo $donnees['description'] ?></td>
+            <td> <?php echo $donnees['date_creation'] ?></td>
+            <td> <?php echo $donnees['date_last_modification'] ?></td>
+            <td> <?php echo $donnees['priority'] ?></td>
 
-                <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')">Delete</a> </td>
+            <td> <a href ="interface-edit-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>"><img src="../view/img/edit.png" width="20px"></a> </td>
 
-                <td> <a href ="../model/notdone-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to move this task to your to do list?')">move to my list</a> </td>
+            <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')"><img src="../view/img/delete.png" width="20px"></a> </td>
 
-              </tr>
+            <td> <a href ="../model/done-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you have accomplished this task ?')"><img src="../view/img/done.png" width="20px"></a> </td>
+
+          </tr>
 
           <?php
           }
+          ?>
 
-          $tasks->closeCursor();
-        ?>
-          </table>
+      </table>
+
     </div>
-  </div>
 
 
+<!--HISTORIQUE DE TACHES REALISEES-->
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="done col-6">
+        <h4>History of tasks done</h4>
+
+        <?php
+
+          $sql = 'SELECT * FROM tasklist WHERE id_project = ? AND id_user = ? AND done_date IS NOT NULL ORDER BY done_date DESC';
+
+          if(isset($getIdProject, $sessionId)) {
+
+            $pdo_statement = $tdl->prepare($sql);
+            $pdo_statement->execute(array($getIdProject, $sessionId));
+
+          }
+
+        ?>
+
+        <table class="table">
+            <tr>
+              <th>Task</th>
+              <th>done on</th>
+            </tr>
+
+            <?php
+            while($donnees = $pdo_statement->fetch()) {
+            ?>
+
+            <tr>
+              <td> <?php echo $donnees['name'] ?></td>
+              <td> <?php echo $donnees['done_date'] ?></td>
+
+              <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')">Delete</a> </td>
+
+              <td> <a href ="../model/notdone-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to move this task to your to do list?')">move to my list</a> </td>
+
+            </tr>
+
+            <?php
+             }
+            ?>
+
+        </table>
+
+      </div>
+    </div>
+
+  <!--Déconnexion-->
+  <p align="right"><a href="../model/signout.php">Sign out</a></p><br>
   </section>
+
 
 <!-- jQuery library -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

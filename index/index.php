@@ -1,5 +1,5 @@
 <?php
-require '../connection-db/connexion-bdd.php'; //CONNEXION A LA BASE DE DONNEES
+include '../view/header.php'; //Head et Header
 
-require '../view/interface.php'; //Connexion vue interface (index)
+require '../view/index.php'; //Connexion view: signin
 ?>

@@ -5,11 +5,9 @@ require '../model/session_start_head.php'; //session_start et récupération de 
 
 require '../model/model.php'; //Fichier model (fonctions du site)
 
-require '../model/fetch.php'; // A tester...
-
 include '../view/header.php'; //Head et Header
 
-addTask(); //Ajout de taches (model.php)
+addProject(); //Ajout de projet (model.php)
 
-require '../view/interface-tasks.php'; //Connexion vue tasks
+require '../view/interface-projects.php'; //Connexion vue interface (index)
 

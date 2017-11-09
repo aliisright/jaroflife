@@ -1,10 +1,13 @@
 <?php
+session_start();
 
 require '../connection-db/connexion-bdd.php';
 
-$tasksDel = $tdl->prepare('DELETE FROM taskList WHERE id = ?');
+$sql = 'DELETE FROM taskList WHERE id = ?'
 
 if(isset($_GET['idTask'])) {
+
+  $pdo_statement = $tdl->prepare($sql);
 
   $tasksDel->execute(array($_GET['idTask']));
 

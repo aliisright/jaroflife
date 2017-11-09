@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require '../connection-db/connexion-bdd.php';
 
@@ -10,6 +11,6 @@ if(isset($_GET['idProject'])) {
 
 }
 
-header('Location: ../index/index.php');
+header('Location: ../index/interface-projects.php');
 
-?>
+  ?>

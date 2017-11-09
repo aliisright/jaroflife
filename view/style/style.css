@@ -30,9 +30,8 @@ body {
   margin-top: 20px;
 }
 
-.form-zone {
+form {
   text-align: center;
-  line-height: 10px;
 }
 
 .title-tools {
@@ -68,4 +67,29 @@ body {
 .list-section {
   margin: 20px;
   overflow: scroll;
+}
+
+.lists {
+  margin-top: 40px;
+}
+
+.table *{
+  text-align: center;
+}
+
+.done table {
+  font-size: 15px;
+}
+
+.done {
+  margin-top: 50px;
+}
+
+.form-task {
+  text-align: center;
+}
+
+.form-zone {
+  text-align: center;
+  line-height: 10px;
 }

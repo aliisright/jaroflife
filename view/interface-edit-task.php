@@ -1,40 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>The ToDoList Project</title>
-  <meta charset="utf-8">
-<!-- Responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<!-- My stylesheet -->
-  <link rel="stylesheet" type="text/css" href="../view/style/tasks.css">
-</head>
-<body>
+<!--FORM MODIF DE TACHE-->
+    <?php
+      $sql = 'SELECT * FROM taskList WHERE id = ? AND id_user = ?';
 
-  <?php include '../view/header.php'; ?> <!--HEADER-->
+      $task = $tdl->prepare($sql);
+      $task->execute(array($_GET['idTask'], $_SESSION['id']));
 
-  <!--FORM MODIF DE TACHE-->
+      while($donnees = $task->fetch()) {
+        echo '<h3 align="center">Edit: ' . $donnees['name'] . '</h3><hr>';
+    ?>
 
-      <?php
-    $sql = 'SELECT * FROM taskList ';
-    $parameters = [];
-
-    if(isset($_GET['idTask'])) {
-      $sql .= 'WHERE id = ? ';
-      $parameters[] = $_GET['idTask'];
-    }
-
-    $task = $tdl->prepare($sql);
-    $task->execute($parameters);
-
-    while($donnees = $task->fetch()) {
-      echo '<h3 align="center">Edit: ' . $donnees['name'] . '</h3><hr>';
-?>
     <section class="add-form container-fluid row">
       <div class="col-md-4"></div>
 
-      <form class="form-zone col-md-4" action="../model/edit-task.php?idTask=<?php echo $_GET['idTask']; ?>&idProject=<?php echo $_GET['idProject']; ?>" method="POST">
+      <form class="form-zone col-md-4" action="" method="POST">
 
           <div class="form-group">
             <label for="name">Edit name</label>
@@ -47,8 +25,8 @@
           </div>
 
           <div class="form-group">
-          <select class="form-control" name="priority" id="priority">
-                        <option value="" disabled="disabled" selected="selected">Select</option>
+          <select class="form-control" name="editPriority" id="priority">
+                        <option value="<?php echo $donnees['priority']; ?>" selected="selected">Select</option>
                         <option value="1">Urgent</option>
                         <option value="2">High</option>
                         <option value="3">Medium</option>
@@ -66,10 +44,15 @@
       </form>
 
       <div class="col-md-4"></div>
-    </section>
-  </div>
 
-<?php } ?>
+    </section>
+
+    <!--Déconnexion-->
+    <p align="center"><a href="../model/signout.php">Sign out</a></p><br>
+
+    <?php
+      }
+    ?>
 
 <!-- jQuery library -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
