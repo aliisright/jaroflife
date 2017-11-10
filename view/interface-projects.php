@@ -1,6 +1,6 @@
 <!--Hello Member! message & Déconnexion-->
   <h3 align="center">Hello <?php echo $userinfo['pseudo'] ?> !</h3>
-  <p align="center"><a href="../model/signout.php">Sign out</a></p><br>
+  <p align="center"><a href="../model/model.php?idSignOut=true">Sign out</a></p><br>
 
 
   <!--FORM AJOUT DE PROJET-->
@@ -48,7 +48,7 @@
             <div class="tools col-md-6"> <!--les outils / modifier et supprimer-->
               <p><a href ="interface-edit-project.php?idProject=<?php echo $donnees['id']; ?>"><img src="../view/img/edit.png" alt="edit" width="20px"></a></p>
 
-              <p><a href ="../model/delete-project.php?idProject=<?php echo $donnees['id'] ?>" onclick="return confirm('Are you sure that you want to delete this project ?')"><img src="../view/img/delete.png" alt="delete" width="20px"></a></p>
+              <p><a href ="../model/model.php?idProjectDelete=<?php echo $donnees['id'] ?>" onclick="return confirm('Are you sure that you want to delete this project ?')"><img src="../view/img/delete.png" alt="delete" width="20px"></a></p>
 
             </div>
           </div>

@@ -1,5 +1,4 @@
 <?php
-
 //AJOUT DE PROJETS
 function addProject() {
 
@@ -43,6 +42,33 @@ function editProject() {
   }
 
 }
+
+//SUPPRESSION DE PROJETS
+function deleteProject() {
+
+  session_start();
+
+  require '../connection-db/connexion-bdd.php';
+
+  $sql = 'DELETE FROM projectslist WHERE id = ?';
+
+  if(isset($_GET['idProjectDelete'])) {
+
+    $pdo_statement = $tdl->prepare($sql);
+
+    $pdo_statement->execute(array($_GET['idProjectDelete']));
+
+  }
+
+  header('Location: ../index/interface-projects.php');
+
+  }
+
+  if (isset($_GET['idProjectDelete'])) {
+
+    deleteProject();
+
+  }
 
 //AJOUT DE TACHES
 function addTask() {
@@ -91,6 +117,87 @@ function editTask() {
   }
 
 }
+
+//SUPPRESSION DE TACHES
+function deleteTask() {
+
+  session_start();
+
+  require '../connection-db/connexion-bdd.php';
+
+  $sql = 'DELETE FROM taskList WHERE id = ?';
+
+  if(isset($_GET['idTaskDelete'])) {
+
+    $pdo_statement = $tdl->prepare($sql);
+
+    $pdo_statement->execute(array($_GET['idTaskDelete']));
+
+  }
+
+  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+
+  }
+
+  if (isset($_GET['idTaskDelete'])) {
+
+    deleteTask();
+
+  }
+
+//TACHES REALISEES
+function taskDone() {
+
+  session_start();
+
+  require '../connection-db/connexion-bdd.php';
+
+  $sql = 'UPDATE taskList SET done_date = ? WHERE id = ?';
+
+  if(isset($_GET['idTaskDone'])) {
+
+    $pdo_statement = $tdl->prepare($sql);
+
+    $pdo_statement->execute(array(date('Y-m-d H:i:s'), $_GET['idTaskDone']));
+
+  }
+
+  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+
+  }
+
+  if (isset($_GET['idTaskDone'])) {
+
+      taskDone();
+
+  }
+
+//TACHES PAS REALISEES (REPLACER LA TACHE DANS LA TO DO LIST)
+function taskNotDone() {
+
+  session_start();
+
+  require '../connection-db/connexion-bdd.php';
+
+  $sql = 'UPDATE taskList SET done_date = ? WHERE id = ?';
+
+  if(isset($_GET['idTaskNotDone'])) {
+
+    $pdo_statement = $tdl->prepare($sql);
+
+    $pdo_statement->execute(array(NULL, $_GET['idTaskNotDone']));
+
+  }
+
+  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+
+  }
+
+  if (isset($_GET['idTaskNotDone'])) {
+
+      taskNotDone();
+
+  }
 
 //INSCRIPTION NOUVEAU MEMBRE
 function addMember() {
@@ -212,5 +319,25 @@ function signIn() {
   }
 
 }
+
+//DECONNEXION MEMBRE
+function signOut() {
+
+  session_start();
+
+  $_SESSION = array();
+
+  session_destroy();
+
+  header('location: ../index/signin.php');
+
+  }
+
+  if (isset($_GET['idSignOut'])) {
+
+        signOut();
+
+  }
+
 
 

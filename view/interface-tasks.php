@@ -103,11 +103,11 @@
             <td> <?php echo $donnees['date_last_modification'] ?></td>
             <td> <?php echo $donnees['priority'] ?></td>
 
-            <td> <a href ="interface-edit-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>"><img src="../view/img/edit.png" width="20px"></a> </td>
+            <td> <a href ="interface-edit-task.php?idTask=<?php echo $donnees['id']; ?>&idProject=<?php echo $donnees['id_project']; ?>"><img src="../view/img/edit.png" alt="edit" width="20px"></a></td>
 
-            <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')"><img src="../view/img/delete.png" width="20px"></a> </td>
+            <td> <a href ="../model/model.php?idTaskDelete=<?php echo $donnees['id']; ?>&idProject=<?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')"><img src="../view/img/delete.png" alt="delete" width="20px"></a> </td>
 
-            <td> <a href ="../model/done-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you have accomplished this task ?')"><img src="../view/img/done.png" width="20px"></a> </td>
+            <td> <a href ="../model/model.php?idTaskDone=<?php echo $donnees['id']; ?>&idProject=<?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you have accomplished this task ?')"><img src="../view/img/done.png" alt="done" width="20px"></a> </td>
 
           </tr>
 
@@ -153,9 +153,9 @@
               <td> <?php echo $donnees['name'] ?></td>
               <td> <?php echo $donnees['done_date'] ?></td>
 
-              <td> <a href ="../model/delete-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')">Delete</a> </td>
+              <td> <a href ="../model/model.php?idTaskDelete=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to remove this task ?')">Delete</a> </td>
 
-              <td> <a href ="../model/notdone-task.php?idTask=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to move this task to your to do list?')">move to my list</a> </td>
+              <td> <a href ="../model/model.php?idTaskNotDone=<?php echo $donnees['id']; ?>&idProject= <?php echo $donnees['id_project']; ?>" onclick="return confirm('Are you sure that you want to move this task to your to do list?')">move to my list</a> </td>
 
             </tr>
 
@@ -169,7 +169,7 @@
     </div>
 
   <!--Déconnexion-->
-  <p align="right"><a href="../model/signout.php">Sign out</a></p><br>
+  <p align="right"><a href="../model/model.php?idSignOut=true">Sign out</a></p><br>
   </section>
 
 

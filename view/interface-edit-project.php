@@ -37,7 +37,7 @@
       <!--Déconnexion-->
     </section>
 
-    <p align="center"><a href="../model/signout.php">Sign out</a></p><br>
+    <p align="center"><a href="../model/model.php?idSignOut=true">Sign out</a></p><br>
 
 
 <?php } ?>
