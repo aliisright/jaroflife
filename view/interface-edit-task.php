@@ -2,10 +2,10 @@
     <?php
       $sql = 'SELECT * FROM taskList WHERE id = ? AND id_user = ?';
 
-      $task = $tdl->prepare($sql);
-      $task->execute(array($_GET['idTask'], $_SESSION['id']));
+      $statement = connectionDb($sql);
+      $statement->execute(array($_GET['idTask'], $_SESSION['id']));
 
-      while($donnees = $task->fetch()) {
+      while($donnees = $statement->fetch()) {
         echo '<h3 align="center">Edit: ' . $donnees['name'] . '</h3><hr>';
     ?>
 

@@ -11,12 +11,12 @@
 
         if(isset($getIdProject, $sessionId)) {
 
-          $pdo_statement = $tdl->prepare($sql);
-          $pdo_statement->execute(array($getIdProject, $sessionId));
+          $statement = connectionDb($sql);
+          $statement->execute(array($getIdProject, $sessionId));
 
         }
 
-          while($donnees = $pdo_statement->fetch() ) {
+          while($donnees = $statement->fetch() ) {
       ?>
             <!--Nom de projet-->
             <h3 align="center"><?php echo $donnees['name'] . ' | N°: ' . $donnees['id'] ?></h3>
@@ -77,8 +77,8 @@
 
           if(isset($getIdProject, $sessionId)) {
 
-            $pdo_statement = $tdl->prepare($sql);
-            $pdo_statement->execute(array($getIdProject, $sessionId));
+            $statement = connectionDb($sql);
+            $statement->execute(array($getIdProject, $sessionId));
 
           }
        ?>
@@ -93,7 +93,7 @@
           </tr>
 
           <?php
-          while($donnees = $pdo_statement->fetch()) {
+          while($donnees = $statement->fetch()) {
           ?>
 
           <tr>
@@ -132,8 +132,8 @@
 
           if(isset($getIdProject, $sessionId)) {
 
-            $pdo_statement = $tdl->prepare($sql);
-            $pdo_statement->execute(array($getIdProject, $sessionId));
+            $statement = connectionDb($sql);
+            $statement->execute(array($getIdProject, $sessionId));
 
           }
 
@@ -146,7 +146,7 @@
             </tr>
 
             <?php
-            while($donnees = $pdo_statement->fetch()) {
+            while($donnees = $statement->fetch()) {
             ?>
 
             <tr>

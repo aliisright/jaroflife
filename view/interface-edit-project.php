@@ -1,12 +1,11 @@
 <!--FORM MODIF DE PROJET-->
-
   <?php
     $sql = 'SELECT * FROM projectsList WHERE id = ? AND id_user = ?';
 
-    $project = $tdl->prepare($sql);
-    $project->execute(array($_GET['idProject'], $_SESSION['id']));
+    $statement = connectionDb($sql);
+    $statement->execute(array($_GET['idProject'], $_SESSION['id']));
 
-    while($donnees = $project->fetch()) {
+    while($donnees = $statement->fetch()) {
       echo '<h3 align="center">Edit: ' . $donnees['name'] . '</h3><hr>';
   ?>
     <section class="add-form container-fluid row">

@@ -1,5 +1,5 @@
 <!--Hello Member! message & Déconnexion-->
-  <h3 align="center">Hello <?php echo $userinfo['pseudo'] ?> !</h3>
+  <h3 align="center">Hello <?php echo $_SESSION['pseudo'] ?> !</h3>
   <p align="center"><a href="../model/model.php?idSignOut=true">Sign out</a></p><br>
 
 
@@ -32,10 +32,11 @@
   <section class="browse container">
 
     <?php //RECUPERATION DE DONNEES ET LES AFFICHER AVEC WHILE
-      $projects = $tdl->prepare('SELECT * FROM projectslist WHERE id_user = ? ORDER BY date_creation DESC');
-      $projects->execute(array($userinfo['id']));
+      $sql = 'SELECT * FROM projectslist WHERE id_user = ? ORDER BY date_creation DESC';
+      $statement = connectionDb($sql);
+      $statement->execute(array($_SESSION['id']));
 
-      while($donnees = $projects->fetch()) {
+      while($donnees = $statement->fetch()) {
 
 
     ?>
@@ -70,7 +71,6 @@
 
     <?php //PHP TERMINE
       }
-      $projects->closeCursor();
     ?>
 
   </section>

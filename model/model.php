@@ -1,4 +1,21 @@
 <?php
+//Connexion Base de données
+function connectionDb($sql) {
+
+  require '../configDb/config.php';
+
+  try {
+
+    $tdl = new PDO($dsn, $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+    $statement = $tdl->prepare($sql);
+
+  } catch (Exception $e) {
+    die('Erreur: ' . $e->getMessage());
+  }
+  return $statement;
+}
+
 //AJOUT DE PROJETS
 function addProject() {
 
@@ -8,11 +25,11 @@ function addProject() {
     $description = htmlspecialchars($_POST['description']);
     $sessionId = $_SESSION['id'];
 
-    require '../connection-db/connexion-bdd.php';
+    $sql = 'INSERT INTO projectslist (id_user, name, description) VALUES (?, ?, ?)';
 
-    $projets = $tdl->prepare('INSERT INTO projectslist (id_user, name, description) VALUES (?, ?, ?)');
+    $statement = connectionDb($sql);
 
-    $projets->execute(array($sessionId, $name, $description));
+    $statement->execute(array($sessionId, $name, $description));
 
   }
 }
@@ -29,11 +46,11 @@ function editProject() {
       $getIdProject = htmlspecialchars($_GET['idProject']);
       $sessionId = $_SESSION['id'];
 
-      require '../connection-db/connexion-bdd.php';
+      $sql = 'UPDATE projectsList SET name=?, description=?, date_last_modification=? WHERE id = ?';
 
-      $tasksEdit = $tdl->prepare('UPDATE projectsList SET name=?, description=?, date_last_modification=? WHERE id = ?');
+      $statement = connectionDb($sql);
 
-      $tasksEdit->execute(array($editName, $editDescription, date('Y-m-d H:i:s'), $getIdProject));
+      $statement->execute(array($editName, $editDescription, date('Y-m-d H:i:s'), $getIdProject));
 
     }
 
@@ -48,15 +65,15 @@ function deleteProject() {
 
   session_start();
 
-  require '../connection-db/connexion-bdd.php';
-
   $sql = 'DELETE FROM projectslist WHERE id = ?';
 
   if(isset($_GET['idProjectDelete'])) {
 
-    $pdo_statement = $tdl->prepare($sql);
+    $idProjectDelete = $_GET['idProjectDelete'];
 
-    $pdo_statement->execute(array($_GET['idProjectDelete']));
+    $statement = connectionDb($sql);
+
+    $statement->execute(array($idProjectDelete));
 
   }
 
@@ -81,11 +98,11 @@ function addTask() {
     $postIdProject = $_POST['id_project'];
     $sessionId = $_SESSION['id'];
 
-    require '../connection-db/connexion-bdd.php';
+    $sql = 'INSERT INTO tasklist (id_project, id_user, name, description, priority) VALUES (?, ?, ?, ?, ?)';
 
-    $tasks = $tdl->prepare('INSERT INTO tasklist (id_project, id_user, name, description, priority) VALUES (?, ?, ?, ?, ?)');
+    $statement = connectionDb($sql);
 
-    $tasks->execute(array($postIdProject, $sessionId, $name, $description, $priority));
+    $statement->execute(array($postIdProject, $sessionId, $name, $description, $priority));
 
   }
 
@@ -104,11 +121,11 @@ function editTask() {
       $getIdTask = htmlspecialchars($_GET['idTask']);
       $sessionId = $_SESSION['id'];
 
-      require '../connection-db/connexion-bdd.php';
+      $sql = 'UPDATE taskList SET name=?, description=?, priority=? WHERE id = ?';
 
-      $tasksEdit = $tdl->prepare('UPDATE taskList SET name=?, description=?, priority=? WHERE id = ?');
+      $statement = connectionDb($sql);
 
-      $tasksEdit->execute(array($_POST['editName'], $_POST['editDescription'], $_POST['priority'], $_GET['idTask']));
+      $statement->execute(array($editName, $editDescription, $editPriority, $getIdTask));
 
     }
 
@@ -123,19 +140,22 @@ function deleteTask() {
 
   session_start();
 
-  require '../connection-db/connexion-bdd.php';
+  //require '../connection-db/connexion-bdd.php';
 
   $sql = 'DELETE FROM taskList WHERE id = ?';
 
-  if(isset($_GET['idTaskDelete'])) {
+  if(isset($_GET['idTaskDelete'], $_GET['idProject'])) {
 
-    $pdo_statement = $tdl->prepare($sql);
+    $idTaskDelete = htmlspecialchars($_GET['idTaskDelete']);
+    $idProject = htmlspecialchars($_GET['idProject']);
 
-    $pdo_statement->execute(array($_GET['idTaskDelete']));
+    $statement = connectionDb($sql);
+
+    $statement->execute(array($idTaskDelete));
 
   }
 
-  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+  header('Location: ../index/interface-tasks.php?idProject=' . $idProject);
 
   }
 
@@ -150,19 +170,20 @@ function taskDone() {
 
   session_start();
 
-  require '../connection-db/connexion-bdd.php';
-
   $sql = 'UPDATE taskList SET done_date = ? WHERE id = ?';
 
-  if(isset($_GET['idTaskDone'])) {
+  if(isset($_GET['idTaskDone'], $_GET['idProject'])) {
 
-    $pdo_statement = $tdl->prepare($sql);
+    $idTaskDone = htmlspecialchars($_GET['idTaskDone']);
+    $idProject = htmlspecialchars($_GET['idProject']);
 
-    $pdo_statement->execute(array(date('Y-m-d H:i:s'), $_GET['idTaskDone']));
+    $statement = connectionDb($sql);
+
+    $statement->execute(array(date('Y-m-d H:i:s'), $idTaskDone));
 
   }
 
-  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+  header('Location: ../index/interface-tasks.php?idProject=' . $idProject);
 
   }
 
@@ -177,19 +198,20 @@ function taskNotDone() {
 
   session_start();
 
-  require '../connection-db/connexion-bdd.php';
-
   $sql = 'UPDATE taskList SET done_date = ? WHERE id = ?';
 
-  if(isset($_GET['idTaskNotDone'])) {
+  if(isset($_GET['idTaskNotDone'], $_GET['idProject'])) {
 
-    $pdo_statement = $tdl->prepare($sql);
+    $idTaskNotDone = htmlspecialchars($_GET['idTaskNotDone']);
+    $idProject = htmlspecialchars($_GET['idProject']);
 
-    $pdo_statement->execute(array(NULL, $_GET['idTaskNotDone']));
+    $statement = connectionDb($sql);
+
+    $statement->execute(array(NULL, $idTaskNotDone));
 
   }
 
-  header('Location: ../index/interface-tasks.php?idProject=' . $_GET['idProject']);
+  header('Location: ../index/interface-tasks.php?idProject=' . $idProject);
 
   }
 
@@ -201,7 +223,6 @@ function taskNotDone() {
 
 //INSCRIPTION NOUVEAU MEMBRE
 function addMember() {
-  require '../connection-db/connexion-bdd.php';
 
   if (isset($_POST['submit'])) {
 
@@ -227,21 +248,28 @@ function addMember() {
             if ($mdplength >= 6) {
 
               if ($mdp == $mdp2) {
+                $sql = 'SELECT * FROM users WHERE email = ?';
 
-                $reqmail = $tdl->prepare('SELECT * FROM users WHERE email = ?');
+                $reqmail = connectionDb($sql);
                 $reqmail->execute(array($email));
                 $mailexist = $reqmail->rowCount();
 
                 if ($mailexist == 0) {
 
-                  $reqpseudo = $tdl->prepare('SELECT * FROM users WHERE pseudo = ?');
+                  $sql = 'SELECT * FROM users WHERE pseudo = ?';
+
+                  $reqpseudo = connectionDb($sql);
                   $reqpseudo->execute(array($pseudo));
                   $pseudoexist = $reqpseudo->rowCount();
 
                   if ($pseudoexist == 0) {
 
-                    $pdo_statement = $tdl->prepare('INSERT INTO users (pseudo, password, email) VALUES (?, ?, ?)');
-                    $pdo_statement->execute(array($pseudo, $mdp, $email));
+                    $sql = 'INSERT INTO users (pseudo, password, email) VALUES (?, ?, ?)';
+
+                    $statement = connectionDb($sql);
+
+                    $statement->execute(array($pseudo, $mdp, $email));
+
                     $formMessage = "<h6 align =\"center\" style=\"color: green\">Successfully registered! Sign in and build your first To Do List!</h6>";
 
                   } else {
@@ -286,8 +314,6 @@ function signIn() {
 
   session_start();
 
-  require '../connection-db/connexion-bdd.php';
-
   if (isset($_POST['submit'])) {
 
     $email = htmlspecialchars(strtolower($_POST['email']));
@@ -295,13 +321,15 @@ function signIn() {
 
     if (isset($email, $mdp)) {
 
-      $pdo_statement = $tdl->prepare('SELECT * FROM users WHERE email = ? AND password =  ?');
-      $pdo_statement->execute(array($email, $mdp));
-      $userexist = $pdo_statement->rowCount();
+      $sql = 'SELECT * FROM users WHERE email = ? AND password =  ?';
+
+      $statement = connectionDb($sql);
+      $statement->execute(array($email, $mdp));
+      $userexist = $statement->rowCount();
 
       if ($userexist == 1) {
 
-        $userData = $pdo_statement->fetch();
+        $userData = $statement->fetch();
         $_SESSION['id'] = $userData['id'];
         $_SESSION['pseudo'] = $userData['pseudo'];
         $_SESSION['email'] = $userData['email'];
